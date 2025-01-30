@@ -1,0 +1,26 @@
+services:
+   nao:
+    image: "ghcr.io/ohmushi/nao:main"
+    restart: always
+    container_name: "nao"
+    environment:
+      ORIGIN: ${ORIGIN}
+      STRIPE_PUBLIC_API_KEY: ${STRIPE_PUBLIC_API_KEY}
+      STRIPE_SECRET_API_KEY: ${STRIPE_SECRET_API_KEY}
+      VITE_STRIPE_PUBLIC_API_KEY: ${STRIPE_PUBLIC_API_KEY}
+      DB_DIR: ${DB_DIR}
+    volumes:
+      - /home/theo/nao/db:/usr/src/app/db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nao.rule=Host(`nao.${DOMAIN}`)"
+      - "traefik.http.routers.nao.tls=true"
+      - "traefik.http.routers.nao.tls.certresolver=resolver"
+      - "traefik.http.services.nao.loadbalancer.server.port=3000"
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - traefik_network
+
+networks:
+  traefik_network:
+    external: true

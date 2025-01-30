@@ -1,0 +1,36 @@
+services:
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    command:
+      - "--label-enable"
+      - "--interval"
+      - "30"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  traefik:
+    image: traefik:v2.5
+    container_name: traefik
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    env_file: "ovh.env"
+    labels:
+      - "traefik.http.routers.ohmushi.rule=Host(`${DOMAIN}`) || Host(`*.${DOMAIN}`)"
+      - "traefik.http.routers.ohmushi.tls.certificates[0].certFile=/certs/${DOMAIN}/fullchain.pem"
+      - "traefik.http.routers.ohmushi.tls.certificates[0].keyFile=/certs/${DOMAIN}/privkey.pem"
+      - "traefik.http.routers.ohmushi.tls.certificates[1].certFile=/certs/${DOMAIN}-0001/fullchain.pem"
+      - "traefik.http.routers.ohmushi.tls.certificates[1].keyFile=/certs/${DOMAIN}-0001/privkey.pem"
+      - "traefik.certificatesresolvers.resolver.acme.email=${EMAIL}"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - /etc/letsencrypt/live:/certs:ro
+    networks:
+      - traefik_network
+
+networks:
+  traefik_network:
+    external: true
