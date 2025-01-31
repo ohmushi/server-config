@@ -5,9 +5,7 @@ services:
     container_name: "tina-api"
     labels:
       - "traefik.enable=true"
-#      - "traefik.http.middlewares.tina-strip-api.stripprefix.prefixes=/api"
       - "traefik.http.routers.tina.rule=Host(`tina.${DOMAIN}`) && PathPrefix(`/api`)"
-#      - "traefik.http.routers.tina.middlewares=tina-strip-api"
       - "traefik.http.routers.tina.tls=true"
       - "traefik.http.routers.tina.tls.certresolver=resolver"
       - "traefik.http.services.tina.loadbalancer.server.port=8080"

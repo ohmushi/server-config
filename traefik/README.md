@@ -1,6 +1,6 @@
 # TRAEFIK
 
-La configuration de base pour un nouveau projet est dans le projet [whoami](~/whoami/compose.yml).
+La configuration de base pour un nouveau projet est dans le projet [whoami](./whoami/compose.yml).
 
 Il faut **dans le compose.yml du projet** :
 - Ajouter un sous domaine DNS chez le cloud provider ('sous-domaine.domain.com')
