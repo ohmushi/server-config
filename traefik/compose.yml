@@ -2,6 +2,7 @@ services:
   watchtower:
     image: containrrr/watchtower
     container_name: watchtower
+    restart: always
     command:
       - "--label-enable"
       - "--interval"
